@@ -1,4 +1,10 @@
 #!/bin/sh
+# Semantic Versioning 2.0.0 guideline
+#
+# Given a version number MAJOR.MINOR.PATCH, increment the:
+# MAJOR version when you make incompatible API changes, (breaking|major|BREAKING CHANGE)
+# MINOR version when you add functionality in a backwards-compatible manner, and (feature|minor|feat)
+# PATCH version when you make backwards-compatible bug fixes. (fix|patch|docs|style|refactor|perf|test|chore)
 GIT_REV_LIST=`git rev-list --tags --max-count=1`
 GIT_REV_LAST=`git rev-parse HEAD`
 VERSION='0.0.0'
