@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Semantic Versioning 2.0.0 guideline
-# 
+#
 # Given a version number MAJOR.MINOR.PATCH, increment the:
 # MAJOR version when you make incompatible API changes, (breaking|major|BREAKING CHANGE)
 # MINOR version when you add functionality in a backwards-compatible manner, and (feature|minor|feat)
@@ -34,9 +34,15 @@ VNUM1=${VERSION_BITS[0]}
 VNUM2=${VERSION_BITS[1]}
 VNUM3=${VERSION_BITS[2]}
 
-MAJOR_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST --pretty=%B | egrep -c '^(breaking:|major:|BREAKING CHANGE:)'`
-MINOR_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST --pretty=%B | egrep -c '^(feature:|minor:|feat:)'`
-PATCH_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST --pretty=%B | egrep -c '^(fix:|patch:|docs:|style:|refactor:|perf:|test:|chore:)'`
+#MAJOR_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST --pretty=%B | egrep -c '^(breaking:|major:|BREAKING CHANGE:)'`
+#MINOR_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST --pretty=%B | egrep -c '^(feature:|minor:|feat:)'`
+#PATCH_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST --pretty=%B | egrep -c '^(fix:|patch:|docs:|style:|refactor:|perf:|test:|chore:)'`
+
+MAJOR_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST..$GIT_REV_LAST --pretty=%B | egrep -c '^(breaking|major|BREAKING CHANGE)(\(.*\))?:'`
+MINOR_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST..$GIT_REV_LAST --pretty=%B | egrep -c '^(feature|minor|feat)(\(.*\))?:'`
+PATCH_COUNT_OF_COMMIT_MSG=`git log $GIT_REV_LIST..$GIT_REV_LAST --pretty=%B | egrep -c '^(fix|patch|docs|style|refactor|perf|test|chore)(\(.*\))?:'`
+
+
 if [ $PATCH_COUNT_OF_COMMIT_MSG -gt 0 ]; then
     VNUM3=$((VNUM3+1))
 fi
@@ -51,7 +57,7 @@ if [ $MAJOR_COUNT_OF_COMMIT_MSG -gt 0 ]; then
 fi
 # count all commits for a branch
 GIT_COMMIT_COUNT=`git rev-list --count HEAD`
-echo "Commit count: $GIT_COMMIT_COUNT" 
+echo "Commit count: $GIT_COMMIT_COUNT"
 #create new tag
 NEW_TAG="$VNUM1.$VNUM2.$VNUM3"
 echo "Updating $VERSION to $NEW_TAG"
